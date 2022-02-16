@@ -11,7 +11,7 @@ export class PaymentService {
                     "token": cardToken
                 },
                 "amount": itemPrice * 100,
-                "currency": "USD",
+                "currency": "EUR",
                 "success_url": "http://localhost:3000/success",
                 "failure_url": "http://localhost:3000/failed"
 
@@ -59,7 +59,7 @@ export class PaymentService {
     }
 
     async refund(paymentId: string, refundAmount: number) {
-        const res = await Utils.checkout.payments.refund(paymentId, { amount: refundAmount })
+        const res = await Utils.checkout.payments.refund(paymentId, { amount: refundAmount * 100 })
 
         const data = res as any
 
@@ -95,4 +95,3 @@ export class PaymentService {
 
 
 
-// cko-session-id=sid_pzznxpvasniu5lc3bybrv23d7u
