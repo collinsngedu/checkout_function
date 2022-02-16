@@ -1,6 +1,14 @@
 import * as functions from "firebase-functions";
 import { PaymentService } from "./paymentService";
 
+export const processIdPayment = functions.https.onCall(async (data, context) => {
+
+    console.log(data)
+
+    return await new PaymentService().idPayment(data.insToken, data.itemPrice, data.customerId);
+
+});
+
 
 export const processCardPayment = functions.https.onCall(async (data, context) => {
 
@@ -46,6 +54,12 @@ export const refund = functions.https.onCall(async (data, context) => {
 
 });
 
+
+export const getCustomer = functions.https.onCall(async (data, context) => {
+
+    return await new PaymentService().getCustomer(data.customerId)
+
+});
 
 
 

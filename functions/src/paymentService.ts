@@ -2,6 +2,40 @@ import { Utils } from './utils';
 
 export class PaymentService {
 
+    async idPayment(insToken: string, itemPrice: number, customerId: string) {
+
+        const res = await Utils.checkout.payments.request(
+            {
+                "source": {
+                    "type": "id",
+                    "id": insToken
+                },
+                "customer": { "id": customerId },
+                "amount": itemPrice * 100,
+                "currency": "EUR",
+                "success_url": "http://localhost:3000/success",
+                "failure_url": "http://localhost:3000/failed"
+
+            },
+        )
+
+        const data = res as any
+        console.log(data)
+
+        if (data.status == "Pending") {
+            return {
+                "status": data.status,
+                "redirectLink": data._links.redirect.href
+            }
+        } else {
+            return {
+                "status": data.status,
+                "id": data.id
+
+            }
+        }
+    }
+
     async cardPayment(cardToken: string, itemPrice: number, cardholderName: string, email: string) {
 
         const res = await Utils.checkout.payments.request(
@@ -89,6 +123,12 @@ export class PaymentService {
             throw "The id not found"
         }
 
+    }
+
+    async getCustomer(customerId: string) {
+        const res = await Utils.checkout.customers.get(customerId);
+
+        return res
     }
 }
 
